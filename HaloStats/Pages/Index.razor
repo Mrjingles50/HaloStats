@@ -9,24 +9,16 @@
 <h1>Stats</h1>
 
 <p>
-        gamertag: <input @bind="gamertag" /> &nbsp &nbsp &nbsp
-        <button class="btn btn-success boldBrownButton" @onclick="ShowData">Show Search Data</button> 
+        Enter gamertag: <input @bind="gamertag" /> &nbsp &nbsp &nbsp
+        <button class="btn btn-success boldBrownButton" @onclick="ShowData">Show player stats</button> 
 </p>
 @if (service == null)
 {
-    <p><em>Loading...</em></p>
+
 }
 else
 {
     <table class="table">
-        <thead>
-            <tr>
-                <th>kills</th>
-                <th>deaths</th>
-                <th>assists</th>
-                <th>betrayals</th>
-            </tr>
-        </thead>
         <tbody>
 
                 <tr>
