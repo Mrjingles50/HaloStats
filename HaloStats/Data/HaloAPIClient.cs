@@ -13,7 +13,7 @@ namespace HaloStats.Data
         {
             _httpClient = client;
         }
-
+        //
         public async Task<string> GetStats() 
         {
             var response = await _httpClient.GetAsync($"{gamertag}{con}");
