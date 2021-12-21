@@ -11,8 +11,6 @@ builder.Services.AddHttpClient<HaloAPIClient>("base", client =>
 {
     client.BaseAddress = new Uri($"{HaloAPIConnectionUtils.HostAddress}");
     client.DefaultRequestHeaders.Add("Authorization", "Cryptum-Token AXdEwzSXKHdg2XmMnjsjluT2d5Jgs7HRbzsTdrDzKdXqIPerC7n9QjqFQQam72Dr");
-    //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-    //client.DefaultRequestHeaders.Add("Cryptum-API-Version", "2.3-alpha");
 });
 var app = builder.Build();
 

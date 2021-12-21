@@ -5,35 +5,109 @@
 
 @using HaloStats.Data
 @using HaloStats.Models
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using System.Text.Json.Nodes
 
-<h1>Stats</h1>
+<h1>Service Record</h1>
 
 <p>
         Enter gamertag: <input @bind="gamertag" /> &nbsp &nbsp &nbsp
         <button class="btn btn-success boldBrownButton" @onclick="ShowData">Show player stats</button> 
 </p>
-@if (service == null)
+@if (jsonObject == null)
 {
 
 }
 else
-{
+{   <label class="fw-bold">Summary</label>
+    
     <table class="table">
+        <thead>
+            <tr>
+                <th>Kills</th>
+                <th>Deaths</th>
+                <th>Assists</th>
+                <th>Betrayals</th>
+                <th>Suicides</th>
+                <th>KDR</th>
+                <th>KDA</th>
+            </tr>
+        </thead>
         <tbody>
-
                 <tr>
-                    <td>@service</td>
- 
-                </tr>
-
+                    <td>@jsonObject["data"]["summary"]["kills"]</td>
+                    <td>@jsonObject["data"]["summary"]["deaths"]</td>
+                    <td>@jsonObject["data"]["summary"]["assists"]</td>
+                    <td>@jsonObject["data"]["summary"]["betrayals"]</td>
+                    <td>@jsonObject["data"]["summary"]["suicides"]</td>
+                    <td>@jsonObject["data"]["kdr"]</td>
+                    <td>@jsonObject["data"]["kda"]</td>
+                </tr> 
         </tbody>
     </table>
+
+    <label class="fw-bold">Damage</label>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Taken</th>
+                <th>Dealt</th>
+                <th>Average</th>
+                <th>Shots Fired</th>
+                <th>Landed</th>
+                <th>Missed</th>
+                <th>Accuracy</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>@jsonObject["data"]["damage"]["taken"]</td>
+                    <td>@jsonObject["data"]["damage"]["dealt"]</td>
+                    <td>@jsonObject["data"]["damage"]["average"]</td>
+                    <td>@jsonObject["data"]["shots"]["fired"]</td>
+                    <td>@jsonObject["data"]["shots"]["landed"]</td>
+                    <td>@jsonObject["data"]["shots"]["missed"]</td>
+                    <td>@jsonObject["data"]["shots"]["accuracy"]</td>
+                </tr> 
+        </tbody>
+    </table>
+    
+    
+    <label class="fw-bold">Matches</label>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Matches Played</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Left</th>
+                <th>Draws</th>
+                <th>Win Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>@jsonObject["data"]["matches_played"]</td>
+                    <td>@jsonObject["data"]["breakdowns"]["matches"]["wins"]</td>
+                    <td>@jsonObject["data"]["breakdowns"]["matches"]["losses"]</td>
+                    <td>@jsonObject["data"]["breakdowns"]["matches"]["left"]</td>                    
+                    <td>@jsonObject["data"]["breakdowns"]["matches"]["draws"]</td>
+                    <td>@jsonObject["data"]["win_rate"]</td>
+                </tr> 
+        </tbody>
+    </table>
+
+
 }
 
 @code {
-    private Summary playerRecord;
+
+    //private Summary sum;
     private string service;
     private string gamertag;
+    private data stats;
+    private JsonNode jsonObject;
     protected override async Task OnInitializedAsync()
     {
         //playerRecord = await API.GetSummary();
@@ -47,8 +121,12 @@ else
             service = "Invalid gamertag";
             return;
         }
-        API.gamertag = gamertag;
-        service = await API.GetStats();
+
+
+        service = await API.GetStats(gamertag);
+        jsonObject = JsonNode.Parse(service);
+        //stats = await API.GetSummary(gamertag);
+        StateHasChanged();
 
     }
 }
